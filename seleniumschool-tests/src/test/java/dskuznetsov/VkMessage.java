@@ -1,7 +1,5 @@
 package dskuznetsov;
 
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,34 +7,40 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import org.aeonbits.owner.ConfigFactory;
 
 import java.util.List;
 
+import static dskuznetsov.Utils.UtilsWebDriver.waitUntilExpectedElementDisplayed;
+import static dskuznetsov.Utils.UtilsWebDriver.waitUntilExpectedTitleDisplayed;
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 public class VkMessage {
     private WebDriver driver;
+    private Credentials cfg = ConfigFactory.create(Credentials.class);
+    private String vkUserUrl = "https://vk.com/avgribanov";
+    private String vkUserName = "Артем Грибанов";
 
-    @Config.Sources({"classpath:Credentials.properties"})
-    public interface Credentials extends Config {
-        @Key("LOGIN")
-        String LOGIN();
 
-        @Key("PASSWORD")
-        String PASSWORD();
+    @Before
+    public void createDriver() {
+        driver = new ChromeDriver();
+    }
+
+    @After
+    public void quitDriver() {
+        driver.quit();
     }
 
     @Test
     public void sendMessageTest() {
 
-        driver.get("https://vk.com/avgribanov");
-        Credentials cfg = ConfigFactory.create(Credentials.class);
+        driver.get(vkUserUrl);
+
 
         //Открываем страницу получателя сообщения и логинимся
-        waitUntilExpectedTitleDisplayed(driver, "Артем Грибанов");
+        waitUntilExpectedTitleDisplayed(driver, vkUserName);
         WebElement loginTextField = driver.findElement(By.xpath("//input[@type='text' and @name='email']"));
         loginTextField.sendKeys(cfg.LOGIN());
         WebElement passwordTextField = driver.findElement(By.xpath("//input[@type='password' and @id='quick_pass']"));
@@ -72,30 +76,5 @@ public class VkMessage {
         assertThat(msgOnPageAfterSend.size() - msgOnPageBeforeSend.size()).isEqualTo(1);
 
     }
-
-    @Before
-    public void createDriver() {
-        driver = new ChromeDriver();
-    }
-
-    @After
-    public void quitDriver() {
-        driver.quit();
-    }
-
-    private void waitUntilExpectedTitleDisplayed(WebDriver driver, final String expectedTitle) {
-        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getTitle().startsWith(expectedTitle);
-            }
-        });
-    }
-
-    private void waitUntilExpectedElementDisplayed(WebDriver driver, final String xpathOfExpectedElement) {
-        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.findElement(By.xpath(xpathOfExpectedElement)).isDisplayed();
-            }
-        });
-    }
 }
+
