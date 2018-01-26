@@ -7,9 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static dskuznetsov.Utils.UtilsWebDriver.waitUntilExpectedTitleDisplayed;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FrontPageTest {
@@ -43,11 +42,5 @@ public class FrontPageTest {
         driver.quit();
     }
 
-    private void waitUntilExpectedTitleDisplayed(WebDriver driver, final String expectedTitle) {
-        (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver d) {
-                return d.getTitle().startsWith(expectedTitle);
-            }
-        });
-    }
+
 }
