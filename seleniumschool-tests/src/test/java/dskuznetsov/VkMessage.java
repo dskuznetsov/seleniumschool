@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.aeonbits.owner.ConfigFactory;
 
+
 import static dskuznetsov.Utils.UtilsWebDriver.waitUntilExpectedElementDisplayed;
 import static dskuznetsov.Utils.UtilsWebDriver.waitUntilExpectedTitleDisplayed;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ public class VkMessage {
     private String vkUserUrl = "https://vk.com/avgribanov";
     private String vkUserName = "Артем Грибанов";
     private String expectedTitleOfDialogPage = "Диалоги";
+
 
 
     @Before
